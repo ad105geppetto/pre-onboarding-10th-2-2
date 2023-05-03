@@ -1,10 +1,11 @@
-import SearchBar from "./components/searchbar";
+import * as S from "./App.styles";
+import Search from "./components/search";
 
 function App() {
   return (
-    <div className="App">
-      <SearchBar />
-    </div>
+    <S.Container>
+      <Search />
+    </S.Container>
   );
 }
 
