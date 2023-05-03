@@ -15,13 +15,42 @@ export default function SearchBar(props: ISearchBarProps) {
       let fetchData;
 
       if (keyword) {
-        fetchData = await fetchSearchSuggestions(keyword);
+        const cache = await caches.open("fetch-keywords-cache");
+        const cacheResponse = await cache.match(
+          `https://api.clinicaltrialskorea.com/api/v1/search-conditions/?name=${keyword}`
+        );
+
+        if (cacheResponse && !isCacheExpired(cacheResponse)) {
+          fetchData = await cacheResponse.json();
+        } else {
+          fetchData = await fetchSearchSuggestions(keyword);
+
+          let newHeaders = new Headers(fetchData.headers);
+          newHeaders.append("fetch-date", new Date().toISOString());
+
+          await cache.put(
+            `https://api.clinicaltrialskorea.com/api/v1/search-conditions/?name=${keyword}`,
+            new Response(JSON.stringify(fetchData), {
+              headers: newHeaders,
+            })
+          );
+        }
+
         console.info("calling api");
       }
 
       props.setSearchKeyword(keyword);
       props.setSearchSuggestions(fetchData || []);
     }, 300);
+
+    const ONE_HOUR = 60 * 60 * 1000;
+
+    function isCacheExpired(cacheResponse: Response) {
+      const fetchDate = new Date(cacheResponse.headers.get("fetch-date")!).getTime();
+      const today = new Date().getTime();
+
+      return today - fetchDate > ONE_HOUR;
+    }
 
     setDebounce(time);
   };
@@ -34,7 +63,6 @@ export default function SearchBar(props: ISearchBarProps) {
     if (props.searchRef.current !== null) {
       props.searchRef.current.value = "";
     }
-    props.setSearchKeyword("");
     props.setSearchSuggestions([]);
     props.setIsVisible(false);
   };

@@ -33,6 +33,11 @@ export const SuggestionTitle = styled.div`
   color: #767f86;
 `;
 
+export const RecentSearcheItem = styled.div`
+  padding-bottom: 12px;
+  font-size: 1.125rem;
+`;
+
 export const NoSearch = styled.div`
   padding-bottom: 20px;
   font-weight: 600;

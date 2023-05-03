@@ -1,4 +1,4 @@
-import { KeyboardEvent, useRef, useState } from "react";
+import { KeyboardEvent, useRef, useState, useEffect } from "react";
 import SearchBar from "../searchbar";
 import * as S from "./search.styles";
 
@@ -6,8 +6,17 @@ export default function Search() {
   const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [isVisible, setIsVisible] = useState(false);
+  const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
   const searchRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const keywords = sessionStorage.getItem("key");
+
+    if (keywords !== null) {
+      setRecentSearches(JSON.parse(keywords));
+    }
+  }, []);
 
   const onClickSearchKeyword = (keyword: string) => {
     if (searchRef.current !== null) {
@@ -24,6 +33,30 @@ export default function Search() {
   };
 
   const onClickSubmitSearch = () => {
+    let keys = sessionStorage.getItem("key");
+
+    if (keys === null) {
+      keys = `[]`;
+    }
+
+    const searchKeywordList = JSON.parse(keys);
+    const MAX_NUMBER = 7;
+
+    if (searchKeywordList.includes(searchKeyword)) {
+      return;
+    }
+
+    if (searchKeywordList.length >= MAX_NUMBER) {
+      searchKeywordList.pop();
+    }
+
+    sessionStorage.setItem("key", JSON.stringify([searchKeyword, ...searchKeywordList]));
+    setRecentSearches([searchKeyword, ...searchKeywordList]);
+
+    if (searchRef.current !== null) {
+      searchRef.current.value = "";
+    }
+    setSearchKeyword("");
     console.info("click search button");
   };
 
@@ -45,7 +78,14 @@ export default function Search() {
         {searchSuggestions.length === 0 ? (
           <S.Suggestions>
             <S.SuggestionTitle>최근 검색어</S.SuggestionTitle>
-            <S.NoSearch>최근 검색어가 없습니다</S.NoSearch>
+            {sessionStorage.getItem("key") ? (
+              recentSearches.map((searchKeyword, key) => (
+                <S.RecentSearcheItem key={key}>{searchKeyword}</S.RecentSearcheItem>
+              ))
+            ) : (
+              <S.NoSearch>최근 검색어가 없습니다</S.NoSearch>
+            )}
+
             <S.SuggestionTitle>추천 검색어로 검색해보세요</S.SuggestionTitle>
             <S.SuggestionButtonWrapper>
               <S.SuggestionButton>B형간염</S.SuggestionButton>
