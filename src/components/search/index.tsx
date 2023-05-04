@@ -2,13 +2,19 @@ import { KeyboardEvent, useRef, useState, useEffect } from "react";
 import SearchBar from "../searchbar";
 import * as S from "./search.styles";
 
+interface searchItem {
+  id: number;
+  name: string;
+}
+
 export default function Search() {
-  const [searchSuggestions, setSearchSuggestions] = useState([]);
+  const [searchSuggestions, setSearchSuggestions] = useState<searchItem[]>([]);
   const [searchKeyword, setSearchKeyword] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
 
   const searchRef = useRef<HTMLInputElement>(null);
+  const numberRef = useRef(-1);
 
   useEffect(() => {
     const keywords = sessionStorage.getItem("key");
@@ -27,8 +33,38 @@ export default function Search() {
   };
 
   const onKeyUpSearchKeyword = (event: KeyboardEvent, keyword: string) => {
+    if (searchRef.current === null) return;
+    if (!keyword) return;
+
+    let currentNumber = numberRef.current;
+
     if (event.key === "Enter") {
       onClickSearchKeyword(keyword);
+      setIsVisible(false);
+    }
+
+    if (event.key === "ArrowUp") {
+      currentNumber--;
+
+      if (currentNumber < 0) {
+        currentNumber = searchSuggestions.length - 1;
+      }
+
+      searchRef.current.value = searchSuggestions[currentNumber].name;
+      setSearchKeyword(searchSuggestions[currentNumber].name);
+      numberRef.current = currentNumber;
+    }
+
+    if (event.key === "ArrowDown") {
+      currentNumber++;
+
+      if (currentNumber > searchSuggestions.length - 1) {
+        currentNumber = 0;
+      }
+
+      searchRef.current.value = searchSuggestions[currentNumber].name;
+      setSearchKeyword(searchSuggestions[currentNumber].name);
+      numberRef.current = currentNumber;
     }
   };
 
@@ -73,6 +109,7 @@ export default function Search() {
         setIsVisible={setIsVisible}
         searchRef={searchRef}
         onClickSubmitSearch={onClickSubmitSearch}
+        onKeyUpSearchKeyword={onKeyUpSearchKeyword}
       />
       <S.SuggestionsWrapper isVisible={isVisible}>
         {searchSuggestions.length === 0 ? (
@@ -99,17 +136,15 @@ export default function Search() {
           <S.Suggestions>
             <S.SearchKeyword>{searchKeyword}</S.SearchKeyword>
             <S.SuggestionTitle>추천 검색어</S.SuggestionTitle>
-            {searchSuggestions
-              .map((keyword: { id: number; name: string }, index) => (
-                <S.SuggestionKeywordWrapper
-                  key={index}
-                  onClick={() => onClickSearchKeyword(keyword.name)}
-                  onKeyUp={event => onKeyUpSearchKeyword(event, keyword.name)}
-                >
-                  <div>{keyword.name}</div>
-                </S.SuggestionKeywordWrapper>
-              ))
-              .slice(0, 7)}
+            {searchSuggestions.map((keyword: { id: number; name: string }, index) => (
+              <S.SuggestionKeywordWrapper
+                key={index}
+                onClick={() => onClickSearchKeyword(keyword.name)}
+                onKeyUp={event => onKeyUpSearchKeyword(event, keyword.name)}
+              >
+                <div>{keyword.name}</div>
+              </S.SuggestionKeywordWrapper>
+            ))}
           </S.Suggestions>
         )}
       </S.SuggestionsWrapper>

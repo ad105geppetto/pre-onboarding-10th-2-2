@@ -40,7 +40,7 @@ export default function SearchBar(props: ISearchBarProps) {
       }
 
       props.setSearchKeyword(keyword);
-      props.setSearchSuggestions(fetchData || []);
+      props.setSearchSuggestions(fetchData.slice(0, 7) || []);
     }, 300);
 
     const ONE_HOUR = 60 * 60 * 1000;
@@ -79,6 +79,12 @@ export default function SearchBar(props: ISearchBarProps) {
           onChange={onChangAutoCompleteSearch}
           onFocus={onFocusAutoCompleteSearch}
           onBlur={onBlurAutoCompleteSearch}
+          onKeyUp={event =>
+            props.onKeyUpSearchKeyword(
+              event,
+              props.searchRef.current ? props.searchRef.current.value : ""
+            )
+          }
         />
       </S.TextInputWrapper>
       <S.ButtonWrapper>
