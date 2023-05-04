@@ -3,6 +3,7 @@ import fetchSearchSuggestions from "../../../api/fetchSearchSuggestions";
 import { BASE_URL, CACHE_STORAGE_NAME, DATE_NAME, RESOURCE_PATH } from "../../../constant";
 import { isCacheExpired } from "../../../utils";
 import * as S from "./searchbar.styles";
+import SearchIcon from "../../common/SearchIcon";
 import { ISearchBarProps } from "./searchbar.types";
 
 export default function SearchBar(props: ISearchBarProps) {
@@ -58,10 +59,12 @@ export default function SearchBar(props: ISearchBarProps) {
     props.setIsVisible(false);
   };
 
+  // TODO: HTML 태그 구조 정리하기
   return (
     <S.Container isVisible={props.isVisible}>
       <S.TextInputWrapper>
         <label htmlFor="search_bar_main"></label>
+        {!props.isVisible && <SearchIcon color="#BABABA" viewBox="0 -5 26 26" size={26} />}
         <S.TextInput
           type="text"
           id="search_bar_main"
@@ -78,9 +81,10 @@ export default function SearchBar(props: ISearchBarProps) {
           }
         />
       </S.TextInputWrapper>
-      <S.ButtonWrapper>
-        <S.SearchButton onClick={props.onClickSubmitSearch}>검색</S.SearchButton>
-      </S.ButtonWrapper>
+      <S.SearchButton>
+        <span className="ir">검색</span>
+        <SearchIcon color="#FFFFFF" viewBox="-4 -5 24 24" size={28} />
+      </S.SearchButton>
     </S.Container>
   );
 }

@@ -7,6 +7,7 @@ import SuggestedSearchGroup from "./suggestedSearchGroup";
 import * as S from "./search.styles";
 import { searchItem } from "./search.types";
 import { moveDown, moveUp } from "../../utils";
+import SearchIcon from "../common/SearchIcon";
 
 export default function Search() {
   const [searchSuggestions, setSearchSuggestions] = useState<searchItem[]>([]);
@@ -105,7 +106,10 @@ export default function Search() {
           </>
         ) : (
           <>
-            <S.SearchKeyword>{searchKeyword}</S.SearchKeyword>
+            <S.SearchKeyword>
+              <SearchIcon color="#BABABA" viewBox="0 -10 26 26" size={26} />
+              {searchKeyword}
+            </S.SearchKeyword>
             <AutoComplete
               searchSuggestions={searchSuggestions}
               onClickSearchKeyword={onClickSearchKeyword}

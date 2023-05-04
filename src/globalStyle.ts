@@ -126,4 +126,11 @@ table {
   border-spacing: 0;
 }
 
+.ir {
+  position: absolute;
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 `;
