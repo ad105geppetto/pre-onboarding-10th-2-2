@@ -1,11 +1,12 @@
 import { KeyboardEvent, useRef, useState, useEffect } from "react";
-import SearchBar from "../searchbar";
+import { MAX_NUMBER, SESSION_STORAGE_KEY } from "../../constant";
+import AutoComplete from "./autoComplete";
+import SearchBar from "./searchbar";
+import SearchHistory from "./searchHistory";
+import SuggestedSearchGroup from "./suggestedSearchGroup";
 import * as S from "./search.styles";
-
-interface searchItem {
-  id: number;
-  name: string;
-}
+import { searchItem } from "./search.types";
+import { moveDown, moveUp } from "../../utils";
 
 export default function Search() {
   const [searchSuggestions, setSearchSuggestions] = useState<searchItem[]>([]);
@@ -17,7 +18,7 @@ export default function Search() {
   const numberRef = useRef(-1);
 
   useEffect(() => {
-    const keywords = sessionStorage.getItem("key");
+    const keywords = sessionStorage.getItem(SESSION_STORAGE_KEY);
 
     if (keywords !== null) {
       setRecentSearches(JSON.parse(keywords));
@@ -33,7 +34,6 @@ export default function Search() {
   };
 
   const onKeyUpSearchKeyword = (event: KeyboardEvent, keyword: string) => {
-    if (searchRef.current === null) return;
     if (!keyword) return;
 
     let currentNumber = numberRef.current;
@@ -44,39 +44,22 @@ export default function Search() {
     }
 
     if (event.key === "ArrowUp") {
-      currentNumber--;
-
-      if (currentNumber < 0) {
-        currentNumber = searchSuggestions.length - 1;
-      }
-
-      searchRef.current.value = searchSuggestions[currentNumber].name;
-      setSearchKeyword(searchSuggestions[currentNumber].name);
-      numberRef.current = currentNumber;
+      moveUp({ currentNumber, searchSuggestions, setSearchKeyword, searchRef, numberRef });
     }
 
     if (event.key === "ArrowDown") {
-      currentNumber++;
-
-      if (currentNumber > searchSuggestions.length - 1) {
-        currentNumber = 0;
-      }
-
-      searchRef.current.value = searchSuggestions[currentNumber].name;
-      setSearchKeyword(searchSuggestions[currentNumber].name);
-      numberRef.current = currentNumber;
+      moveDown({ currentNumber, searchSuggestions, setSearchKeyword, searchRef, numberRef });
     }
   };
 
   const onClickSubmitSearch = () => {
-    let keys = sessionStorage.getItem("key");
+    let keys = sessionStorage.getItem(SESSION_STORAGE_KEY);
 
     if (keys === null) {
       keys = `[]`;
     }
 
     const searchKeywordList = JSON.parse(keys);
-    const MAX_NUMBER = 7;
 
     if (searchKeywordList.includes(searchKeyword)) {
       return;
@@ -86,7 +69,10 @@ export default function Search() {
       searchKeywordList.pop();
     }
 
-    sessionStorage.setItem("key", JSON.stringify([searchKeyword, ...searchKeywordList]));
+    sessionStorage.setItem(
+      SESSION_STORAGE_KEY,
+      JSON.stringify([searchKeyword, ...searchKeywordList])
+    );
     setRecentSearches([searchKeyword, ...searchKeywordList]);
 
     if (searchRef.current !== null) {
@@ -113,39 +99,19 @@ export default function Search() {
       />
       <S.SuggestionsWrapper isVisible={isVisible}>
         {searchSuggestions.length === 0 ? (
-          <S.Suggestions>
-            <S.SuggestionTitle>최근 검색어</S.SuggestionTitle>
-            {sessionStorage.getItem("key") ? (
-              recentSearches.map((searchKeyword, key) => (
-                <S.RecentSearcheItem key={key}>{searchKeyword}</S.RecentSearcheItem>
-              ))
-            ) : (
-              <S.NoSearch>최근 검색어가 없습니다</S.NoSearch>
-            )}
-
-            <S.SuggestionTitle>추천 검색어로 검색해보세요</S.SuggestionTitle>
-            <S.SuggestionButtonWrapper>
-              <S.SuggestionButton>B형간염</S.SuggestionButton>
-              <S.SuggestionButton>비만</S.SuggestionButton>
-              <S.SuggestionButton>관절염</S.SuggestionButton>
-              <S.SuggestionButton>우울증</S.SuggestionButton>
-              <S.SuggestionButton>식도염</S.SuggestionButton>
-            </S.SuggestionButtonWrapper>
-          </S.Suggestions>
+          <>
+            <SearchHistory recentSearches={recentSearches} />
+            <SuggestedSearchGroup />
+          </>
         ) : (
-          <S.Suggestions>
+          <>
             <S.SearchKeyword>{searchKeyword}</S.SearchKeyword>
-            <S.SuggestionTitle>추천 검색어</S.SuggestionTitle>
-            {searchSuggestions.map((keyword: { id: number; name: string }, index) => (
-              <S.SuggestionKeywordWrapper
-                key={index}
-                onClick={() => onClickSearchKeyword(keyword.name)}
-                onKeyUp={event => onKeyUpSearchKeyword(event, keyword.name)}
-              >
-                <div>{keyword.name}</div>
-              </S.SuggestionKeywordWrapper>
-            ))}
-          </S.Suggestions>
+            <AutoComplete
+              searchSuggestions={searchSuggestions}
+              onClickSearchKeyword={onClickSearchKeyword}
+              onKeyUpSearchKeyword={onKeyUpSearchKeyword}
+            />
+          </>
         )}
       </S.SuggestionsWrapper>
     </section>

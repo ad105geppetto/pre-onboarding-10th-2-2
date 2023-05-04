@@ -1,5 +1,7 @@
 import { ChangeEvent, useState } from "react";
-import fetchSearchSuggestions from "../../api/fetchSearchSuggestions";
+import fetchSearchSuggestions from "../../../api/fetchSearchSuggestions";
+import { CACHE_STORAGE_NAME, DATE_NAME } from "../../../constant";
+import { isCacheExpired } from "../../../utils";
 import * as S from "./searchbar.styles";
 import { ISearchBarProps } from "./searchbar.types";
 
@@ -15,7 +17,7 @@ export default function SearchBar(props: ISearchBarProps) {
       let fetchData;
 
       if (keyword) {
-        const cache = await caches.open("fetch-keywords-cache");
+        const cache = await caches.open(CACHE_STORAGE_NAME);
         const cacheResponse = await cache.match(
           `https://api.clinicaltrialskorea.com/api/v1/search-conditions/?name=${keyword}`
         );
@@ -26,7 +28,7 @@ export default function SearchBar(props: ISearchBarProps) {
           fetchData = await fetchSearchSuggestions(keyword);
 
           let newHeaders = new Headers(fetchData.headers);
-          newHeaders.append("fetch-date", new Date().toISOString());
+          newHeaders.append(DATE_NAME, new Date().toISOString());
 
           await cache.put(
             `https://api.clinicaltrialskorea.com/api/v1/search-conditions/?name=${keyword}`,
@@ -42,15 +44,6 @@ export default function SearchBar(props: ISearchBarProps) {
       props.setSearchKeyword(keyword);
       props.setSearchSuggestions(fetchData.slice(0, 7) || []);
     }, 300);
-
-    const ONE_HOUR = 60 * 60 * 1000;
-
-    function isCacheExpired(cacheResponse: Response) {
-      const fetchDate = new Date(cacheResponse.headers.get("fetch-date")!).getTime();
-      const today = new Date().getTime();
-
-      return today - fetchDate > ONE_HOUR;
-    }
 
     setDebounce(time);
   };
