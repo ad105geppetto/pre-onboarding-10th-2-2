@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import fetchSearchSuggestions from "../../../api/fetchSearchSuggestions";
-import { CACHE_STORAGE_NAME, DATE_NAME } from "../../../constant";
+import { BASE_URL, CACHE_STORAGE_NAME, DATE_NAME, RESOURCE_PATH } from "../../../constant";
 import { isCacheExpired } from "../../../utils";
 import * as S from "./searchbar.styles";
 import { ISearchBarProps } from "./searchbar.types";
@@ -18,9 +18,7 @@ export default function SearchBar(props: ISearchBarProps) {
 
       if (keyword) {
         const cache = await caches.open(CACHE_STORAGE_NAME);
-        const cacheResponse = await cache.match(
-          `https://api.clinicaltrialskorea.com/api/v1/search-conditions/?name=${keyword}`
-        );
+        const cacheResponse = await cache.match(`${BASE_URL}${RESOURCE_PATH}/?name=${keyword}`);
 
         if (cacheResponse && !isCacheExpired(cacheResponse)) {
           fetchData = await cacheResponse.json();
@@ -31,7 +29,7 @@ export default function SearchBar(props: ISearchBarProps) {
           newHeaders.append(DATE_NAME, new Date().toISOString());
 
           await cache.put(
-            `https://api.clinicaltrialskorea.com/api/v1/search-conditions/?name=${keyword}`,
+            `${BASE_URL}${RESOURCE_PATH}/?name=${keyword}`,
             new Response(JSON.stringify(fetchData), {
               headers: newHeaders,
             })
