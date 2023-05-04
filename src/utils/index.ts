@@ -1,13 +1,13 @@
 import { IMoveProps } from "./utils.types";
 import { CacheConfigType } from "./utils.types";
 import { DATE_NAME } from "../constant";
+import { CACHE_EXPIRE_TIME } from "../constant";
 
 export const isCacheExpired = (cacheResponse: Response) => {
-  const ONE_HOUR = 60 * 60 * 1000;
   const fetchDate = new Date(cacheResponse.headers.get("fetch-date")!).getTime();
   const today = new Date().getTime();
 
-  return today - fetchDate > ONE_HOUR;
+  return today - fetchDate > CACHE_EXPIRE_TIME;
 };
 
 export const handleCache = async (
