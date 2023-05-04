@@ -110,11 +110,15 @@ export default function Search() {
               <SearchIcon color="#BABABA" viewBox="0 -10 26 26" size={26} />
               {searchKeyword}
             </S.SearchKeyword>
-            <AutoComplete
-              searchSuggestions={searchSuggestions}
-              onClickSearchKeyword={onClickSearchKeyword}
-              onKeyUpSearchKeyword={onKeyUpSearchKeyword}
-            />
+            <S.SuggestionTitle>추천 검색어</S.SuggestionTitle>
+            <ul>
+              <AutoComplete
+                searchSuggestions={searchSuggestions}
+                onClickSearchKeyword={onClickSearchKeyword}
+                onKeyUpSearchKeyword={onKeyUpSearchKeyword}
+                searchingValue={searchRef?.current?.value}
+              />
+            </ul>
           </>
         )}
       </S.SuggestionsWrapper>
