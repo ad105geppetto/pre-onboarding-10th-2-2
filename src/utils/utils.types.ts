@@ -8,3 +8,8 @@ export interface IMoveProps {
   searchRef: RefObject<HTMLInputElement>;
   numberRef: MutableRefObject<number>;
 }
+
+export interface CacheConfigType {
+  storageName: string;
+  url: string;
+}

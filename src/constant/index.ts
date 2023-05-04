@@ -4,3 +4,4 @@ export const DATE_NAME = "fetch-date";
 export const MAX_NUMBER = 7;
 export const RESOURCE_PATH = "/api/v1/search-conditions";
 export const BASE_URL = "https://api.clinicaltrialskorea.com";
+export const DEBOUNCE_TIME = 300;
