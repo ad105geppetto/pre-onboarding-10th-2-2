@@ -117,7 +117,7 @@ export default function Search() {
           </>
         ) : (
           <>
-            <S.SearchKeyword>
+            <S.SearchKeyword tabIndex={-1}>
               <SearchIcon color="#BABABA" viewBox="0 -10 26 26" size={26} />
               {boldText}
             </S.SearchKeyword>
