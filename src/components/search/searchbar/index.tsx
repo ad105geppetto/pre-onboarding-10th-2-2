@@ -41,7 +41,6 @@ export default function SearchBar({
     setIsVisible(true);
   };
 
-  // TODO: HTML 태그 구조 정리하기
   return (
     <S.Container isVisible={isVisible}>
       <S.TextInputWrapper>

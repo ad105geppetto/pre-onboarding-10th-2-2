@@ -93,9 +93,15 @@ export default function Search() {
     isClosing && setIsVisible(false);
   };
 
+  const onClickClose = (event: React.MouseEvent<HTMLElement>) => {
+    const target = event.target as HTMLElement;
+    const classListArr = Array.from(target.classList);
+    if (classListArr.includes("hide-click")) setIsVisible(false);
+  };
+
   return (
-    <section>
-      <S.SearchTitle>
+    <section className="hide-click" onClick={onClickClose}>
+      <S.SearchTitle className="hide-click">
         <span>국내 모든 임상시험 검색하고</span>
         <span>온라인으로 참여하기</span>
       </S.SearchTitle>

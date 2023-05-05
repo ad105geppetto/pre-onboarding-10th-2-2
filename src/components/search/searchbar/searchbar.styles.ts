@@ -7,6 +7,7 @@ interface IProps {
 export const Container = styled.div`
   display: flex;
   align-items: center;
+  margin: 0 auto;
   width: 490px;
   padding-right: 8px;
   background-color: white;
