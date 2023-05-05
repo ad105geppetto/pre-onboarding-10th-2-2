@@ -125,5 +125,18 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+button {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+}
 
+.ir {
+  position: absolute;
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
 `;

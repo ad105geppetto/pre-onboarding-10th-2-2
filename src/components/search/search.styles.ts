@@ -30,8 +30,10 @@ export const SuggestionTitle = styled.div`
   color: #767f86;
 `;
 
-export const SearchKeyword = styled.div`
+export const SearchKeyword = styled.button`
+  width: 100%;
   padding-top: 10px;
   font-size: 1.125rem;
   font-weight: 700;
+  text-align: left;
 `;
