@@ -124,7 +124,6 @@ export default function Search() {
                 searchSuggestions={searchSuggestions}
                 onClickSearchKeyword={onClickSearchKeyword}
                 onKeyUpSearchKeyword={onKeyUpSearchKeyword}
-                searchingValue={searchRef?.current?.value}
                 boldText={boldText}
                 currentNumber={numberRef.current}
               />
