@@ -34,8 +34,8 @@ export default function Search() {
 
     // 과제 홈페이지: 검색어 클릭 -> 인풋 값 클릭한 값대로 바꾼 뒤 -> 검색어 페이지로 넘어가는 과정
     // 그래서 state 초기화를 진행했습니다.
+    onClickSubmitSearch();
     setIsVisible(false);
-    setSearchKeyword("");
     setSearchSuggestions([]);
   };
 
@@ -68,7 +68,7 @@ export default function Search() {
 
     const searchKeywordList = JSON.parse(keys);
 
-    if (searchKeywordList.includes(searchKeyword)) {
+    if (searchKeywordList.includes(searchRef.current?.value)) {
       return;
     }
 
@@ -78,9 +78,9 @@ export default function Search() {
 
     sessionStorage.setItem(
       SESSION_STORAGE_KEY,
-      JSON.stringify([searchKeyword, ...searchKeywordList])
+      JSON.stringify([searchRef.current?.value, ...searchKeywordList])
     );
-    setRecentSearches([searchKeyword, ...searchKeywordList]);
+    setRecentSearches([searchRef.current?.value, ...searchKeywordList]);
 
     if (searchRef.current !== null) {
       searchRef.current.value = "";

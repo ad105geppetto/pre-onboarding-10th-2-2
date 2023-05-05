@@ -16,6 +16,7 @@ export default function SearchBar({
   searchRef,
   onKeyUpSearchKeyword,
   setBoldText,
+  onClickSubmitSearch,
 }: ISearchBarProps) {
   const onInpChange = async (event: React.FormEvent<HTMLInputElement>) => {
     const target = event.target as HTMLInputElement;
@@ -60,7 +61,9 @@ export default function SearchBar({
         />
       </S.TextInputWrapper>
       <S.SearchButton>
-        <span className="ir">검색</span>
+        <span className="ir" onClick={onClickSubmitSearch}>
+          검색
+        </span>
         <SearchIcon color="#FFFFFF" viewBox="-4 -5 24 24" size={28} />
       </S.SearchButton>
     </S.Container>
