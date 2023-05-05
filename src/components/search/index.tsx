@@ -119,7 +119,7 @@ export default function Search() {
           <>
             <S.SearchKeyword>
               <SearchIcon color="#BABABA" viewBox="0 -10 26 26" size={26} />
-              {searchKeyword}
+              {boldText}
             </S.SearchKeyword>
             <S.SuggestionTitle>추천 검색어</S.SuggestionTitle>
             <ul>
