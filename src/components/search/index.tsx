@@ -43,6 +43,7 @@ export default function Search() {
     if (event.key === "Enter") {
       onClickSearchKeyword(keyword);
       setIsVisible(false);
+      alert(searchKeyword);
     }
 
     if (event.key === "ArrowUp") {
@@ -125,6 +126,7 @@ export default function Search() {
                 onKeyUpSearchKeyword={onKeyUpSearchKeyword}
                 searchingValue={searchRef?.current?.value}
                 boldText={boldText}
+                currentNumber={numberRef.current}
               />
             </ul>
           </>
