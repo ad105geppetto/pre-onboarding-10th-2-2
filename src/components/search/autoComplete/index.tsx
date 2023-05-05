@@ -8,12 +8,15 @@ export default function AutoComplete(props: IAutoCompleteProps) {
   return (
     <>
       {props.searchSuggestions.map((keyword: { id: number; name: string }, index) => {
-
-        const tempName = keyword.name.replaceAll(props.boldText, "@").split("");
+        const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(props.boldText);
+        const tempName = isKorean ? keyword.name.split(props.boldText) : keyword.name.split('');
+        const boldList = keyword.name.match(new RegExp(`${props.boldText}`, 'ig'))
         const newName = tempName.map((char, idx) => {
-          if (char === "@") return <S.Bold key={idx}>{props.boldText}</S.Bold>;
+          if (isKorean && char === '') return <S.Bold key={idx}>{props.boldText}</S.Bold>;
+          if (!isKorean && boldList?.includes(char)) return <S.Bold key={idx}>{char}</S.Bold>
           return <S.NormalText key={idx}>{char}</S.NormalText>;
         });
+
         const isLastEl = index === dataLength - 1;
 
         return (

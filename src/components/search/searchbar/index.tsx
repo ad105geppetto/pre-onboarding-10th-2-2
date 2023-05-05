@@ -15,7 +15,7 @@ export default function SearchBar({
   setIsVisible,
   searchRef,
   onKeyUpSearchKeyword,
-  setBoldText
+  setBoldText,
 }: ISearchBarProps) {
   const [inpValue, setInpValue] = useState("");
 
