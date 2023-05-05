@@ -17,7 +17,10 @@ interface IProps {
 
 export const SuggestionsWrapper = styled.div`
   display: ${(props: IProps) => (props.isVisible ? "" : "none")};
+  width: 490px;
   margin-top: 10px;
+  margin-left: auto;
+  margin-right: auto;
   padding: 20px;
   border-radius: 20px;
   background-color: white;
