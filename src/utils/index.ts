@@ -68,3 +68,13 @@ export const moveDown = (props: IMoveProps) => {
   props.setSearchKeyword(props.searchSuggestions[props.currentNumber].name);
   props.numberRef.current = props.currentNumber;
 };
+
+export const debounce = (func: any, delay: number) => {
+  let timeoutId: ReturnType<typeof setTimeout>;
+  return (...args: any[]) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+};

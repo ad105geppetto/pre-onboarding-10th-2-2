@@ -27,12 +27,16 @@ export default function Search() {
     }
   }, []);
 
-  const onClickSearchKeyword = (keyword: string) => {
+  const onClickSearchKeyword = async (keyword: string) => {
     if (searchRef.current !== null) {
       searchRef.current.value = keyword;
     }
 
-    onClickSubmitSearch();
+    // 과제 홈페이지: 검색어 클릭 -> 인풋 값 클릭한 값대로 바꾼 뒤 -> 검색어 페이지로 넘어가는 과정
+    // 그래서 state 초기화를 진행했습니다.
+    setIsVisible(false);
+    setSearchKeyword("");
+    setSearchSuggestions([]);
   };
 
   const onKeyUpSearchKeyword = (event: KeyboardEvent, keyword: string) => {
@@ -82,7 +86,6 @@ export default function Search() {
       searchRef.current.value = "";
     }
     setSearchKeyword("");
-    console.info("click search button");
   };
 
   const onTabClose = (event: React.FocusEvent<HTMLElement>) => {
