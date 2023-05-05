@@ -46,6 +46,7 @@ export default function Search() {
 
     if (event.key === "Enter") {
       onClickSearchKeyword(keyword);
+      setSearchKeyword("");
       setIsVisible(false);
       alert(searchKeyword);
     }
@@ -81,10 +82,6 @@ export default function Search() {
       JSON.stringify([searchRef.current?.value, ...searchKeywordList])
     );
     setRecentSearches([searchRef.current?.value, ...searchKeywordList]);
-
-    if (searchRef.current !== null) {
-      searchRef.current.value = "";
-    }
     setSearchKeyword("");
   };
 
@@ -95,6 +92,7 @@ export default function Search() {
 
   const onClickClose = (event: React.MouseEvent<HTMLElement>) => {
     const target = event.target as HTMLElement;
+    console.info(target);
     const classListArr = Array.from(target.classList);
     if (classListArr.includes("hide-click")) setIsVisible(false);
   };
@@ -128,7 +126,7 @@ export default function Search() {
               {boldText}
             </S.SearchKeyword>
             <S.SuggestionTitle>추천 검색어</S.SuggestionTitle>
-            <ul>
+            <ul style={{ zIndex: 100 }}>
               <AutoComplete
                 searchSuggestions={searchSuggestions}
                 onClickSearchKeyword={onClickSearchKeyword}
