@@ -8,13 +8,15 @@ export default function AutoComplete(props: IAutoCompleteProps) {
   return (
     <>
       {props.searchSuggestions.map((keyword: { id: number; name: string }, index) => {
-        const isKorean = /[ㄱ-ㅎ|ㅏ-ㅣ|가-힣]/.test(props.boldText);
-        const tempName = isKorean ? keyword.name.split(props.boldText) : keyword.name.split('');
-        const boldList = keyword.name.match(new RegExp(`${props.boldText}`, 'ig'))
-        const newName = tempName.map((char, idx) => {
-          if (isKorean && char === '') return <S.Bold key={idx}>{props.boldText}</S.Bold>;
-          if (!isKorean && boldList?.includes(char)) return <S.Bold key={idx}>{char}</S.Bold>
-          return <S.NormalText key={idx}>{char}</S.NormalText>;
+        const regex = new RegExp(`(${props.boldText})`, "gi");
+        const chunks = keyword.name.split(regex);
+
+        const newName = chunks.map((chunk, index) => {
+          if (chunk.toLowerCase() === props.boldText.toLowerCase()) {
+            return <S.Bold key={index}>{chunk}</S.Bold>;
+          } else {
+            return <S.NormalText key={index}>{chunk}</S.NormalText>;
+          }
         });
 
         const isLastEl = index === dataLength - 1;

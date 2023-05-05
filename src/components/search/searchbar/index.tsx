@@ -20,7 +20,7 @@ export default function SearchBar({
   const [inpValue, setInpValue] = useState("");
 
   const searchAutoComplete = useCallback(
-    async (value: any) => {
+    async (value: string) => {
       let fetchData;
 
       if (value) {
@@ -29,7 +29,7 @@ export default function SearchBar({
             storageName: CACHE_STORAGE_NAME,
             url: `${BASE_URL}${RESOURCE_PATH}/?name=${value}`,
           },
-          () => fetchSearchSuggestions(value)
+          () => fetchSearchSuggestions(value.toLowerCase())
         );
       }
 
