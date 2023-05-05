@@ -21,7 +21,7 @@ export default function AutoComplete(props: IAutoCompleteProps) {
         const isLastEl = index === dataLength - 1;
         const isSelected =
           props.currentNumber === -1 ||
-          props.searchSuggestions[props.currentNumber].id !== keyword.id
+          props.searchSuggestions[props.currentNumber]?.id !== keyword.id
             ? false
             : true;
 
