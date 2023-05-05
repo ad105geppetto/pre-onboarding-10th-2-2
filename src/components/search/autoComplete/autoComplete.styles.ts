@@ -1,17 +1,24 @@
 import styled from "styled-components";
 
-export const SuggestionKeywordWrapper = styled.li`
-  padding: 10px 0;
+interface Props {
+  isSelected: boolean;
+}
 
+export const SuggestionKeywordWrapper = styled.li<Props>`
+  padding: 10px 0;
   strong {
     font-weight: bold;
   }
-
   button {
     display: block;
     width: 100%;
     text-align: left;
   }
+
+  :hover {
+    background-color: #f7f7fb;
+  }
+  background-color: ${props => (props.isSelected ? "#f7f7fb" : "none")};
 `;
 
 export const Bold = styled.span`
