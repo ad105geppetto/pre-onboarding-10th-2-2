@@ -16,10 +16,9 @@ export default function AutoComplete(props: IAutoCompleteProps) {
         let isSame = matchSplited?.join("") === "";
         const isLastEl = index === dataLength - 1;
 
-        // TODO: key로 index 말고 keyword.id
         return (
           <S.SuggestionKeywordWrapper
-            key={index}
+            key={keyword.id}
             onClick={() => props.onClickSearchKeyword(keyword.name)}
             onKeyUp={event => props.onKeyUpSearchKeyword(event, keyword.name)}
           >
