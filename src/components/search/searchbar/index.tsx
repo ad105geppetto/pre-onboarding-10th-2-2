@@ -59,10 +59,14 @@ export default function SearchBar({
           }
         />
       </S.TextInputWrapper>
-      <S.SearchButton>
-        <span className="ir" onClick={onClickSubmitSearch}>
-          검색
-        </span>
+      <S.SearchButton
+        className="submit-btn"
+        onClick={() => {
+          onClickSubmitSearch();
+          if (searchRef.current) searchRef.current.value = "";
+        }}
+      >
+        <span className="ir">검색</span>
         <SearchIcon color="#FFFFFF" viewBox="-4 -5 24 24" size={28} />
       </S.SearchButton>
     </S.Container>
