@@ -92,7 +92,6 @@ export default function Search() {
 
   const onClickClose = (event: React.MouseEvent<HTMLElement>) => {
     const target = event.target as HTMLElement;
-    console.info(target);
     const classListArr = Array.from(target.classList);
     if (classListArr.includes("hide-click")) setIsVisible(false);
   };
