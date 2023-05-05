@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import fetchSearchSuggestions from "../../../api/fetchSearchSuggestions";
 import { BASE_URL, CACHE_STORAGE_NAME, RESOURCE_PATH } from "../../../constant";
 import * as S from "./searchbar.styles";
 import SearchIcon from "../../common/SearchIcon";
 import { ISearchBarProps } from "./searchbar.types";
-import useDebounce from "../../../hooks/useDebounce";
+import { debounce } from "../../../utils";
 import { handleCache } from "../../../utils";
 import { DEBOUNCE_TIME } from "../../../constant";
 
@@ -17,35 +17,25 @@ export default function SearchBar({
   onKeyUpSearchKeyword,
   setBoldText,
 }: ISearchBarProps) {
-  const [inpValue, setInpValue] = useState("");
+  const onInpChange = async (event: React.FormEvent<HTMLInputElement>) => {
+    const target = event.target as HTMLInputElement;
+    let fetchData;
 
-  const searchAutoComplete = useCallback(
-    async (value: string) => {
-      let fetchData;
-
-      if (value) {
-        fetchData = await handleCache(
-          {
-            storageName: CACHE_STORAGE_NAME,
-            url: `${BASE_URL}${RESOURCE_PATH}/?name=${value}`,
-          },
-          () => fetchSearchSuggestions(value.toLowerCase())
-        );
-      }
-
-      setSearchKeyword(value);
-      setSearchSuggestions(fetchData?.slice(0, 7) || []);
-    },
-    [setSearchKeyword, setSearchSuggestions]
-  );
-
-  useDebounce(inpValue, searchAutoComplete, DEBOUNCE_TIME);
-
-  const onInpChange = (e: React.ChangeEvent) => {
-    const target = e.target as HTMLInputElement;
-    setInpValue(target.value);
+    if (target.value) {
+      fetchData = await handleCache(
+        {
+          storageName: CACHE_STORAGE_NAME,
+          url: `${BASE_URL}${RESOURCE_PATH}/?name=${target.value}`,
+        },
+        () => fetchSearchSuggestions(target.value.toLowerCase())
+      );
+    }
     setBoldText(target.value);
+    setSearchKeyword(target.value);
+    setSearchSuggestions(fetchData?.slice(0, 7) || []);
   };
+
+  const debouncedOnInpChange = debounce(onInpChange, DEBOUNCE_TIME);
 
   const onFocusAutoCompleteSearch = () => {
     setIsVisible(true);
@@ -60,10 +50,9 @@ export default function SearchBar({
         <S.TextInput
           type="text"
           id="search_bar_main"
-          value={inpValue}
           placeholder={isVisible ? "" : "질환명을 입력해주세요."}
           ref={searchRef}
-          onChange={onInpChange}
+          onChange={(event: React.FormEvent<HTMLInputElement>) => debouncedOnInpChange(event)}
           onFocus={onFocusAutoCompleteSearch}
           onKeyUp={event =>
             onKeyUpSearchKeyword(event, searchRef.current ? searchRef.current.value : "")
