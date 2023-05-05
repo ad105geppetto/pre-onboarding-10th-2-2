@@ -125,6 +125,12 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+button {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+}
 
 .ir {
   position: absolute;

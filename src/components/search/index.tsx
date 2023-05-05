@@ -1,4 +1,4 @@
-import { KeyboardEvent, useRef, useState, useEffect } from "react";
+import React, { KeyboardEvent, useRef, useState, useEffect } from "react";
 import { MAX_NUMBER, SESSION_STORAGE_KEY } from "../../constant";
 import AutoComplete from "./autoComplete";
 import SearchBar from "./searchbar";
@@ -83,6 +83,11 @@ export default function Search() {
     console.info("click search button");
   };
 
+  const onTabClose = (event: React.FocusEvent<HTMLElement>) => {
+    const isClosing = event.target.classList.contains("search-res-last-el");
+    isClosing && setIsVisible(false);
+  };
+
   return (
     <section>
       <S.SearchTitle>
@@ -98,7 +103,7 @@ export default function Search() {
         onClickSubmitSearch={onClickSubmitSearch}
         onKeyUpSearchKeyword={onKeyUpSearchKeyword}
       />
-      <S.SuggestionsWrapper isVisible={isVisible}>
+      <S.SuggestionsWrapper isVisible={isVisible} onBlur={onTabClose}>
         {searchSuggestions.length === 0 ? (
           <>
             <SearchHistory recentSearches={recentSearches} />

@@ -49,14 +49,6 @@ export default function SearchBar({
     setIsVisible(true);
   };
 
-  const onBlurAutoCompleteSearch = () => {
-    if (searchRef.current !== null) {
-      searchRef.current.value = "";
-    }
-    setSearchSuggestions([]);
-    setIsVisible(false);
-  };
-
   // TODO: HTML 태그 구조 정리하기
   return (
     <S.Container isVisible={isVisible}>
@@ -71,7 +63,6 @@ export default function SearchBar({
           ref={searchRef}
           onChange={onInpChange}
           onFocus={onFocusAutoCompleteSearch}
-          onBlur={onBlurAutoCompleteSearch}
           onKeyUp={event =>
             onKeyUpSearchKeyword(event, searchRef.current ? searchRef.current.value : "")
           }

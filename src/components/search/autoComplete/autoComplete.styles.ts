@@ -6,4 +6,10 @@ export const SuggestionKeywordWrapper = styled.li`
   strong {
     font-weight: bold;
   }
+
+  button {
+    display: block;
+    width: 100%;
+    text-align: left;
+  }
 `;
