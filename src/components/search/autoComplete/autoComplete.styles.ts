@@ -18,7 +18,7 @@ export const SuggestionKeywordWrapper = styled.li<Props>`
   :hover {
     background-color: #f7f7fb;
   }
-  background-color: ${(props) => props.isSelected ? "#f7f7fb" : "none"}
+  background-color: ${props => (props.isSelected ? "#f7f7fb" : "none")};
 `;
 
 export const Bold = styled.span`

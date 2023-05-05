@@ -2,6 +2,7 @@ import { IMoveProps } from "./utils.types";
 import { CacheConfigType } from "./utils.types";
 import { DATE_NAME } from "../constant";
 import { CACHE_EXPIRE_TIME } from "../constant";
+import { searchItem } from "../components/search/search.types";
 
 export const isCacheExpired = (cacheResponse: Response) => {
   const fetchDate = new Date(cacheResponse.headers.get("fetch-date")!).getTime();
@@ -13,7 +14,7 @@ export const isCacheExpired = (cacheResponse: Response) => {
 export const handleCache = async (
   cacheConfig: CacheConfigType,
   callback: (...args: any[]) => any
-) => {
+): Promise<searchItem[]> => {
   const { storageName, url } = cacheConfig;
   let fetchData;
 
