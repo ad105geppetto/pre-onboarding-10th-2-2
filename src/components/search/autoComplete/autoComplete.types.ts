@@ -7,4 +7,5 @@ export interface IAutoCompleteProps {
   onKeyUpSearchKeyword: (event: KeyboardEvent, name: string) => void;
   searchingValue: string | undefined;
   boldText: string;
+  currentNumber: number;
 }
