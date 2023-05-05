@@ -13,4 +13,5 @@ export interface ISearchBarProps {
   searchRef: RefObject<HTMLInputElement>;
   onClickSubmitSearch: () => void;
   onKeyUpSearchKeyword: (event: KeyboardEvent, keyword: string) => void;
+  setBoldText: Dispatch<SetStateAction<string>>;
 }

@@ -8,12 +8,12 @@ export default function AutoComplete(props: IAutoCompleteProps) {
   return (
     <>
       {props.searchSuggestions.map((keyword: { id: number; name: string }, index) => {
-        let matchSplited;
-        if (props.searchingValue) {
-          matchSplited = keyword.name.split(props.searchingValue);
-        }
 
-        let isSame = matchSplited?.join("") === "";
+        const tempName = keyword.name.replaceAll(props.boldText, "@").split("");
+        const newName = tempName.map((char, idx) => {
+          if (char === "@") return <S.Bold key={idx}>{props.boldText}</S.Bold>;
+          return <S.NormalText key={idx}>{char}</S.NormalText>;
+        });
         const isLastEl = index === dataLength - 1;
 
         return (
@@ -24,17 +24,7 @@ export default function AutoComplete(props: IAutoCompleteProps) {
           >
             <button className={isLastEl ? "search-res-last-el" : ""}>
               <SearchIcon color="#BABABA" viewBox="0 -10 26 26" size={26} />
-              {isSame ? (
-                <strong>{keyword.name}</strong>
-              ) : (
-                matchSplited?.map((value, i) => {
-                  if (value.trim() === "") {
-                    return <strong key={i}>{props.searchingValue}</strong>;
-                  } else {
-                    return value;
-                  }
-                })
-              )}
+              {newName}
             </button>
           </S.SuggestionKeywordWrapper>
         );

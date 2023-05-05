@@ -14,6 +14,7 @@ export default function Search() {
   const [searchKeyword, setSearchKeyword] = useState("");
   const [isVisible, setIsVisible] = useState(false);
   const [recentSearches, setRecentSearches] = useState<string[]>([]);
+  const [boldText, setBoldText] = useState("");
 
   const searchRef = useRef<HTMLInputElement>(null);
   const numberRef = useRef(-1);
@@ -102,6 +103,7 @@ export default function Search() {
         searchRef={searchRef}
         onClickSubmitSearch={onClickSubmitSearch}
         onKeyUpSearchKeyword={onKeyUpSearchKeyword}
+        setBoldText={setBoldText}
       />
       <S.SuggestionsWrapper isVisible={isVisible} onBlur={onTabClose}>
         {searchSuggestions.length === 0 ? (
@@ -122,6 +124,7 @@ export default function Search() {
                 onClickSearchKeyword={onClickSearchKeyword}
                 onKeyUpSearchKeyword={onKeyUpSearchKeyword}
                 searchingValue={searchRef?.current?.value}
+                boldText={boldText}
               />
             </ul>
           </>

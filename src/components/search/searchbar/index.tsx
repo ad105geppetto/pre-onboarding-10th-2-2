@@ -15,6 +15,7 @@ export default function SearchBar({
   setIsVisible,
   searchRef,
   onKeyUpSearchKeyword,
+  setBoldText
 }: ISearchBarProps) {
   const [inpValue, setInpValue] = useState("");
 
@@ -43,6 +44,7 @@ export default function SearchBar({
   const onInpChange = (e: React.ChangeEvent) => {
     const target = e.target as HTMLInputElement;
     setInpValue(target.value);
+    setBoldText(target.value);
   };
 
   const onFocusAutoCompleteSearch = () => {

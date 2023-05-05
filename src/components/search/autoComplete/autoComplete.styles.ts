@@ -13,3 +13,13 @@ export const SuggestionKeywordWrapper = styled.li`
     text-align: left;
   }
 `;
+
+export const Bold = styled.span`
+  font-weight: bold;
+  text-indent: 0;
+`;
+
+export const NormalText = styled.span`
+  text-indent: 0;
+  white-space: pre;
+`;
